@@ -1,0 +1,87 @@
+#:kivy 1.7.1
+#: set NAVY_BLUE [0,0.349,0.953,1]
+
+<AppScreen>:
+	canvas.before:
+	    Color:
+	        rgb: 1,1,1
+	    Rectangle:
+            size: self.size
+			source: 'img/background.png'
+
+BoxLayout:
+	ScreenManager:
+		id: global_sec
+		thirdform: thirdform
+		SecondForm:
+			id: secondform
+			name: 'secondform'
+			text_ip: ipaddress
+			text_port: port
+			GridLayout:
+				cols:1
+				row_default_height: 50
+				row_force_default:True
+				spacing: 20
+				padding: 100,100
+				TextInput:
+					id: ipaddress
+					hint_text: 'Enter IP address of the Server here'
+					focus:False
+					font_size:25
+				TextInput:
+					id: port
+					hint_text: 'Port'
+					focus:False
+					font_size:25
+				Button:
+					background_color: NAVY_BLUE
+					id: btn_IP
+					text: 'connect to server'
+					font_size: 25
+					on_press: secondform.enter_ip(ipaddress.text, port.text)
+
+		ThirdForm:
+			id: thirdform
+			name: 'thirdform'
+			GridLayout:
+				cols: 2
+				row_default_height: 50
+				row_force_default:True
+				spacing: 20
+				padding: 100,100
+				Label:
+					halign: 'left'
+					text: 'Organization'
+					font_size:25
+				Organization:
+					id: org
+					font_size:25
+					on_release: org.run_org(ipaddress.text, port.text)
+				Label:
+					text: 'Building'
+					font_size:25
+				Building:
+					id: bld
+					font_size:25
+					on_release: bld.run_bld(ipaddress.text, port.text)
+				Label:
+					text: 'Floor'
+					font_size:25
+				Floor:
+					id: flr
+					font_size:25
+					on_release: flr.run_flr(ipaddress.text, port.text)
+				Label:
+					font_size:25
+				Label:
+					font_size:25
+				Label:
+					font_size:25
+				Button:
+					background_color: NAVY_BLUE
+					id: btn_4th
+					text: 'proceed'
+					font_size: 25
+					on_press: thirdform.open_popup()
+					
