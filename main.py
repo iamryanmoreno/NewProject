@@ -7,7 +7,7 @@ from kivy.app import App
 from kivy.lang import Builder
 from base import Base
 from kivy.uix.screenmanager import ScreenManager, Screen
-from kivy.properties import (ObjectProperty, NumericProperty, OptionProperty, BooleanProperty, StringProperty)
+from kivy.properties import (ObjectProperty, NumericProperty, OptionProperty, BooleanProperty, StringProperty, ListProperty)
 from kivy.uix.spinner import Spinner
 from kivy.clock import Clock
 from kivy.properties import ObjectProperty
@@ -21,6 +21,8 @@ import urllib2
 import json
 import requests
 from tinydb import TinyDB, Query
+import unicodedata
+from pprint import pprint
 
 pop1 = Popup(title='Empty Data', content=Label(text='Missing values in text fields'),size_hint=(None,None),size=(280,100))
 pop2 = Popup(title='Page4', content=Label(text='To be continue'),size_hint=(None,None),size=(280,100))
@@ -28,29 +30,26 @@ pop_unsucess = Popup(title='Result:', content=Label(text='None'),size_hint=(None
 
 class Organization(Spinner):
 	def run_org(self,ipadd,prt,**kwargs):
-		org_url = "http://"+ipadd+":"+prt+"/organization"
+		org_url = "http://"+ipadd+":"+prt+"/organizations"
 		org = urllib2.urlopen(org_url)
-		get_values = org.read()
-		get_values = json.loads(get_values)
-		get_values = json.load(urllib2.urlopen(org_url))
-		self.values = get_values
+		data = org.read()
+		data = json.loads(data)
+		self.values = []
+		for i in range (0, len(data['results'])):
+			self.values.append((str(data['results'][i]['organization_name'])))
+		
 		
 class Building(Spinner):
-	def run_bld(self,ipadd,prt,**kwargs):
-		org_url = "http://"+ipadd+":"+prt+"/building"
+	def run_bld(self,ipadd,prt,org,**kwargs):
+		org_url = "http://"+ipadd+":"+prt+"/buildings"
 		org = urllib2.urlopen(org_url)
-		get_values = org.read()
-		get_values = json.loads(get_values)
-		self.values = get_values
-		#get_values = json.load(urllib2.urlopen(org_url))
-		#print get_values
-		#print get_values[status]
-		#type(get_values)
-		#self.values = get_values[results][building_name]
+		data = org.read()
+		data = json.loads(data)
+		self.values = []
 	
 class Floor(Spinner):
 	def run_flr(self,ipadd,prt,**kwargs):
-		org_url = "http://"+ipadd+":"+prt+"/floor"
+		org_url = "http://"+ipadd+":"+prt+"/floors"
 		org = urllib2.urlopen(org_url)
 		get_values = org.read()
 		get_values = json.loads(get_values)
@@ -74,12 +73,13 @@ class SecondForm(AppScreen):
 				print self.request
 				print "Result: before success", self.request.result,"\n"
 				
+				'''
 				db = TinyDB('D:/savemuna.json')
 				User = Query()
 				db.insert({'ip': ipadd, 'port': prt})
 				result = db.search(User.ip == ipadd)
 				print result
-				
+				'''
         def res(self,*args):
 			print "Result: after success", self.request.result
 			self.manager.current = 'thirdform'
