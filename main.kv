@@ -59,12 +59,13 @@ BoxLayout:
 					font_size:25
 					on_release: org.run_org(ipaddress.text, port.text)
 				Label:
+					id: bld
 					text: 'Building'
 					font_size:25
 				Building:
 					id: bld
 					font_size:25
-					on_release: bld.run_bld(ipaddress.text, port.text)
+					on_release: bld.run_bld(ipaddress.text, port.text, org.text)
 				Label:
 					text: 'Floor'
 					font_size:25
