@@ -5,7 +5,6 @@ from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.app import App
 from kivy.lang import Builder
-from base import Base
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import (ObjectProperty, NumericProperty, OptionProperty, BooleanProperty, StringProperty, ListProperty)
 from kivy.uix.spinner import Spinner
@@ -36,10 +35,12 @@ class Organization(Spinner):
 		data = json.loads(data)
 		self.values = []
 		for i in range (0, len(data['results'])):
-			self.values.append((str(data['results'][i]['organization_name'])))
+			values1 = str(data['results'][i]['organization_name'])
+			self.values.append(values1)
 		
 class Building(Spinner):
 	def run_bld(self,ipadd,prt,org,**kwargs):
+		self.text = ''
 		bld_url = "http://"+ipadd+":"+prt+"/buildings"
 		bld = urllib2.urlopen(bld_url)
 		data = bld.read()
@@ -62,6 +63,7 @@ class Building(Spinner):
 	
 class Floor(Spinner):
 	def run_flr(self,ipadd,prt,bld,**kwargs):
+		self.text = ''
 		flr_url = "http://"+ipadd+":"+prt+"/floors"
 		flr = urllib2.urlopen(flr_url)
 		data = flr.read()
@@ -85,6 +87,19 @@ class Floor(Spinner):
 class AppScreen(Screen):
     pass
 
+
+class FirstForm(AppScreen):
+	splash = NumericProperty()
+	def __init__(self, **kwargs):
+		super(FirstForm, self).__init__(**kwargs)
+		Clock.schedule_once(self.callNext, 3)
+
+	def callNext(self,dt):
+		self.manager.current = 'secondform'
+		print "Hi this is call Next Function of loading 1"
+		
+		
+	
 class SecondForm(AppScreen):
         def enter_ip(self,ipadd,prt,**kwargs):
 			if (ipadd=='' or prt == ''):
@@ -98,13 +113,6 @@ class SecondForm(AppScreen):
 				print self.request
 				print "Result: before success", self.request.result,"\n"
 				
-				'''
-				db = TinyDB('D:/savemuna.json')
-				User = Query()
-				db.insert({'ip': ipadd, 'port': prt})
-				result = db.search(User.ip == ipadd)
-				print result
-				'''
         def res(self,*args):
 			print "Result: after success", self.request.result
 			self.manager.current = 'thirdform'
@@ -116,33 +124,15 @@ class SecondForm(AppScreen):
 class ThirdForm(AppScreen):	
 		def open_popup(self):
 			pop2.open()
-		
-class MainWindow(AppScreen):
-        def exit_app(self):
-                sys.exit()
 
-class First(App, Base):
-    def work(self):
-        self = Builder.load_file('main.kv')
 		
 class main(App):
-        def build(self):
-                "Splash Screen"
-                wing = Image(source='img/dummy.png', pos=(800,800))
-                animation = Animation(x=0,y=0,d=2,t='out_bounce');
-                animation.start(wing)
-                Clock.schedule_once(First.work,100)
-                self = Builder.load_file('main.kv')
-                return self
+    def build(self):
+        config = self.config
+        self.title = "App title here"
+        self.root = Builder.load_file('main.kv')
+        return self.root
 				
-class main1(App, Base):
-				
-        def build(self):
-                config = self.config
-                self.title = "App title here"
-                self.root = Builder.load_file('main.kv')
-                Base.__init__(self)
-                return self.root
 				
 if __name__=='__main__':
 	main().run()
