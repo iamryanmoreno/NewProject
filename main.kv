@@ -13,6 +13,16 @@ BoxLayout:
 	ScreenManager:
 		id: global_sec
 		thirdform: thirdform
+		
+		FirstForm:
+			id: firstform
+			canvas.before:
+				Color:
+					rgb: (1,1,1,self.splash)
+				Rectangle:
+					size: self.size
+					source: 'img/dummy.png'
+
 		SecondForm:
 			id: secondform
 			name: 'secondform'
@@ -39,7 +49,8 @@ BoxLayout:
 					id: btn_IP
 					text: 'connect to server'
 					font_size: 25
-					on_press: secondform.enter_ip(ipaddress.text, port.text)
+					on_press: secondform.enter_ip(ipaddress.text, port.text); org.text = ""; bld.text = "";flr.text = ""
+					on_release: org.run_org(ipaddress.text, port.text);
 
 		ThirdForm:
 			id: thirdform
@@ -57,7 +68,8 @@ BoxLayout:
 				Organization:
 					id: org
 					font_size:25
-					on_release: org.run_org(ipaddress.text, port.text)
+					#on_release: org.run_org(ipaddress.text, port.text)
+					on_release: bld.text = "";flr.text = ""
 				Label:
 					id: bld
 					text: 'Building'
@@ -65,7 +77,7 @@ BoxLayout:
 				Building:
 					id: bld
 					font_size:25
-					on_release: bld.run_bld(ipaddress.text, port.text, org.text)
+					on_release: bld.run_bld(ipaddress.text, port.text, org.text); flr.text = ""
 				Label:
 					text: 'Floor'
 					font_size:25
@@ -89,4 +101,3 @@ BoxLayout:
 					text: 'proceed'
 					font_size: 35
 					on_press: thirdform.open_popup()
-					
