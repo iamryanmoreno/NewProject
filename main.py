@@ -38,24 +38,49 @@ class Organization(Spinner):
 		for i in range (0, len(data['results'])):
 			self.values.append((str(data['results'][i]['organization_name'])))
 		
-		
 class Building(Spinner):
 	def run_bld(self,ipadd,prt,org,**kwargs):
-		org_url = "http://"+ipadd+":"+prt+"/buildings"
-		org = urllib2.urlopen(org_url)
-		data = org.read()
+		bld_url = "http://"+ipadd+":"+prt+"/buildings"
+		bld = urllib2.urlopen(bld_url)
+		data = bld.read()
 		data = json.loads(data)
 		self.values = []
+		
+		org_url = "http://"+ipadd+":"+prt+"/organizations"
+		org1 = urllib2.urlopen(org_url)
+		org_data = org1.read()
+		org1_data = json.loads(org_data)
+		new_strOrgID = ""
+		for a in range (0, len(org1_data['results'])):
+			if (org1_data['results'][a]['organization_name'] == str(org)):
+				str_orgID = org1_data['results'][a]['_id']
+				new_strOrgID = str_orgID
+		
+		for i in range (0, len(data['results'])):
+			if (data['results'][i]['organization_id'] == new_strOrgID):
+				self.values.append((str(data['results'][i]['building_name'])))
 	
 class Floor(Spinner):
-	def run_flr(self,ipadd,prt,**kwargs):
-		org_url = "http://"+ipadd+":"+prt+"/floors"
-		org = urllib2.urlopen(org_url)
-		get_values = org.read()
-		get_values = json.loads(get_values)
-		get_values = json.load(urllib2.urlopen(org_url))
-		self.values = get_values
-
+	def run_flr(self,ipadd,prt,bld,**kwargs):
+		flr_url = "http://"+ipadd+":"+prt+"/floors"
+		flr = urllib2.urlopen(flr_url)
+		data = flr.read()
+		data = json.loads(data)
+		self.values = []
+		
+		bld_url = "http://"+ipadd+":"+prt+"/buildings"
+		bld1 = urllib2.urlopen(bld_url)
+		bld_data = bld1.read()
+		bld1_data = json.loads(bld_data)
+		new_strBldID = ""
+		for a in range (0, len(bld1_data['results'])):
+			if (bld1_data['results'][a]['building_name'] == str(bld)):
+				str_bldID = bld1_data['results'][a]['_id']
+				new_strBldID = str_bldID
+		
+		for i in range (0, len(data['results'])):
+			if (data['results'][i]['building_id'] == new_strBldID):
+				self.values.append((str(data['results'][i]['floor_name'])))
 
 class AppScreen(Screen):
     pass
@@ -83,6 +108,9 @@ class SecondForm(AppScreen):
         def res(self,*args):
 			print "Result: after success", self.request.result
 			self.manager.current = 'thirdform'
+			
+        def back(self,*args):
+			self.manager.current = 'secondform'
 			
 			
 class ThirdForm(AppScreen):	
