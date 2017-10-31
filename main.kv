@@ -72,9 +72,7 @@ BoxLayout:
 				Floor:
 					id: flr
 					font_size:25
-					on_release: flr.run_flr(ipaddress.text, port.text)
-				Label:
-					font_size:25
+					on_release: flr.run_flr(ipaddress.text, port.text, bld.text)
 				Label:
 					font_size:25
 				Label:
@@ -82,7 +80,13 @@ BoxLayout:
 				Button:
 					background_color: NAVY_BLUE
 					id: btn_4th
+					text: 'back'
+					font_size: 35
+					on_press: secondform.back()
+				Button:
+					background_color: NAVY_BLUE
+					id: btn_4th
 					text: 'proceed'
-					font_size: 25
+					font_size: 35
 					on_press: thirdform.open_popup()
 					
