@@ -22,6 +22,15 @@ import requests
 from tinydb import TinyDB, Query
 import unicodedata
 from pprint import pprint
+import serial
+from base import Base
+import threading
+import os
+import time
+from kivy.clock import Clock
+import datetime
+import serial
+
 
 pop1 = Popup(title='Empty Data', content=Label(text='Missing values in text fields'),size_hint=(None,None),size=(280,100))
 pop2 = Popup(title='Page4', content=Label(text='To be continue'),size_hint=(None,None),size=(280,100))
@@ -89,14 +98,13 @@ class AppScreen(Screen):
 
 
 class FirstForm(AppScreen):
-	splash = NumericProperty()
 	def __init__(self, **kwargs):
 		super(FirstForm, self).__init__(**kwargs)
-		Clock.schedule_once(self.callNext, 3)
+		Clock.schedule_once(self.callNext, 1)
 
 	def callNext(self,dt):
 		self.manager.current = 'secondform'
-		print "Hi this is call Next Function of loading 1"
+		print "Loading Splash Screen done"
 		
 		
 	
@@ -122,9 +130,38 @@ class SecondForm(AppScreen):
 			
 			
 class ThirdForm(AppScreen):	
-		def open_popup(self):
-			pop2.open()
+	def open_popup(self):
+		pop2.open()
+	def proceed(self,*args):
+		self.manager.current = 'fourthform'
 
+class FourthForm(AppScreen,App,Base):
+    def build(self):
+        Base.__init__(self)
+        threading.Thread(target=self.update_data).start()
+    def update_data(self, *args):
+        line_num = 0
+        if self.debug:
+            f = open(self.cur_dir + 'sample.txt', 'r')
+            lines = f.readlines()
+        while True:
+            if self.debug:
+                if line_num == len(lines) - 1:
+                    line_num = 0
+                else:
+                    line_num += 1
+                data = lines[line_num][:-1]
+                print "Line number: ", line_num
+            else:
+                data = ''
+            if data.startswith('[02]'):
+                data_header = data[4:6]
+                data_list = ['00', '02']
+                if data_header in data_list:
+                    content = data[7:-5]
+                    tmp = '[b][color=FFEC1F]' + content + '[/color][/b]'
+                    self.glb_amt.text = tmp
+            time.sleep(.5)
 		
 class main(App):
     def build(self):
