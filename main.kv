@@ -18,7 +18,7 @@ BoxLayout:
 			id: firstform
 			canvas.before:
 				Color:
-					rgb: (1,1,1,self.splash)
+					rgb: (1,1,1)
 				Rectangle:
 					size: self.size
 					source: 'img/dummy.png'
@@ -100,4 +100,36 @@ BoxLayout:
 					id: btn_4th
 					text: 'proceed'
 					font_size: 35
-					on_press: thirdform.open_popup()
+					on_press: thirdform.proceed(); fourthform.build()
+				
+		FourthForm:
+			id: fourthform
+			name: 'fourthform'
+			glb_amt : lcl_amt
+			BoxLayout:
+				orientation: 'vertical'
+				BoxLayout:
+					orientation: 'vertical'
+					GridLayout:
+						orientation: 'vertical'
+						cols: 2
+						Label:
+							text: 'Amount of Water'
+							font_name: './fonts/HWYGWDE.ttf'
+							font_size: 50
+					GridLayout:
+						orientation: 'vertical'
+						cols: 2
+						Label:
+							text: ''
+							id: lcl_amt
+							font_size: 200
+							font_name: './fonts/HWYGOTH.ttf'
+							markup: True
+						Label:
+							valign: 'bottom'
+							text: '[color=88EC1F]L[/color]'
+							font_size: 200
+							markup: True
+
+				
