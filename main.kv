@@ -1,4 +1,4 @@
-#:kivy 1.7.1
+#:kivy 1.10.0
 #: set NAVY_BLUE [0,0.349,0.953,1]
 
 <AppScreen>:
@@ -100,12 +100,12 @@ BoxLayout:
 					id: btn_4th
 					text: 'proceed'
 					font_size: 35
-					on_press: thirdform.proceed(); fourthform.build()
+					on_press: thirdform.proceed(org.text,bld.text, flr.text); fourthform.build()
 				
 		FourthForm:
 			id: fourthform
 			name: 'fourthform'
-			glb_amt : lcl_amt
+			glb_amt: lcl_amt
 			BoxLayout:
 				orientation: 'vertical'
 				BoxLayout:
@@ -115,7 +115,6 @@ BoxLayout:
 						cols: 2
 						Label:
 							text: 'Amount of Water'
-							font_name: './fonts/HWYGWDE.ttf'
 							font_size: 50
 					GridLayout:
 						orientation: 'vertical'
@@ -124,7 +123,6 @@ BoxLayout:
 							text: ''
 							id: lcl_amt
 							font_size: 200
-							font_name: './fonts/HWYGOTH.ttf'
 							markup: True
 						Label:
 							valign: 'bottom'
