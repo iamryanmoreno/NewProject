@@ -30,7 +30,9 @@ import time
 from kivy.clock import Clock
 import datetime
 import serial
+import kivy
 
+print(kivy.__version__)
 
 pop1 = Popup(title='Empty Data', content=Label(text='Missing values in text fields'),size_hint=(None,None),size=(280,100))
 pop2 = Popup(title='Page4', content=Label(text='To be continue'),size_hint=(None,None),size=(280,100))
@@ -100,7 +102,7 @@ class AppScreen(Screen):
 class FirstForm(AppScreen):
 	def __init__(self, **kwargs):
 		super(FirstForm, self).__init__(**kwargs)
-		Clock.schedule_once(self.callNext, 1)
+		Clock.schedule_once(self.callNext, 3)
 
 	def callNext(self,dt):
 		self.manager.current = 'secondform'
@@ -132,7 +134,8 @@ class SecondForm(AppScreen):
 class ThirdForm(AppScreen):	
 	def open_popup(self):
 		pop2.open()
-	def proceed(self,*args):
+	def proceed(self,org,bld,flr,*args):
+		print "Organization: " + org + "\n" + "Building: " + bld + "\n" + "Floor: "+ flr + "\n"
 		self.manager.current = 'fourthform'
 
 class FourthForm(AppScreen,App,Base):
