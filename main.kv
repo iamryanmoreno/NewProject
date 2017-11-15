@@ -13,16 +13,18 @@ BoxLayout:
 	ScreenManager:
 		id: global_sec
 		thirdform: thirdform
-		
 		FirstForm:
 			id: firstform
+			lb_date: fourthform.lb_date
+			lb_time: fourthform.lb_time
+			glb_amt: fourthform.glb_amt
+			dis_org: fourthform.dis_org
 			canvas.before:
 				Color:
 					rgb: (1,1,1)
 				Rectangle:
 					size: self.size
 					source: 'img/dummy.png'
-
 		SecondForm:
 			id: secondform
 			name: 'secondform'
@@ -49,9 +51,14 @@ BoxLayout:
 					id: btn_IP
 					text: 'connect to server'
 					font_size: 25
-					on_press: secondform.enter_ip(ipaddress.text, port.text); org.text = ""; bld.text = "";flr.text = ""
+					on_press: secondform.enter_ip(ipaddress.text, port.text); org.text = ""; bld.text = "";flr.text = ""; 
 					on_release: org.run_org(ipaddress.text, port.text);
-
+					
+				CenteredAsyncImage:
+					size_hint: 0.8,0.8
+					pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+					mipmap: True
+				
 		ThirdForm:
 			id: thirdform
 			name: 'thirdform'
@@ -105,11 +112,48 @@ BoxLayout:
 		FourthForm:
 			id: fourthform
 			name: 'fourthform'
-			glb_amt: lcl_amt
+			glb_amt: glb_amt
+			lb_date: lb_date
+			lb_time: lb_time
+			dis_org: dis_org
 			BoxLayout:
 				orientation: 'vertical'
 				BoxLayout:
 					orientation: 'vertical'
+					GridLayout:
+						orientation: 'horizontal'
+						cols: 3
+						Label:
+							id: dis_org
+							size_hint_y: None
+							text: org.text
+							font_size: 40
+						Label:
+							size_hint_y: None
+							id: lb_time
+							text: ''
+							font_size: 40
+						Label:
+							size_hint_y: None
+							id: lb_date
+							text: ''
+							font_size: 40
+					Carousel:
+						FormCarousel1:
+							Label:
+								size_hint_y: None
+								text: "Dummy1 - Swipe Right"
+								font_size: 40
+						FormCarousel2:
+							Label:
+								size_hint_y: None
+								text: "Dummy2 - Swipe Right"
+								font_size: 40
+						FormCarousel3:
+							Label:
+								size_hint_y: None
+								text: "Dummy3 - Swipe Left"
+								font_size: 40
 					GridLayout:
 						orientation: 'vertical'
 						cols: 2
@@ -121,7 +165,7 @@ BoxLayout:
 						cols: 2
 						Label:
 							text: ''
-							id: lcl_amt
+							id: glb_amt
 							font_size: 200
 							markup: True
 						Label:
